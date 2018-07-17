@@ -1,4 +1,4 @@
-# Library Versions
+# Library Version
 
 Library | Version
 ------- | -------
