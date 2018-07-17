@@ -283,13 +283,13 @@ func testData(t *testing.T) {
 func testOrder(t *testing.T, c int) {
 	var curve string
 	var field string
-	if c == CurveFp254BNb {
+	if c == BN254 {
 		curve = "16798108731015832284940804142231733909759579603404752749028378864165570215949"
 		field = "16798108731015832284940804142231733909889187121439069848933715426072753864723"
-	} else if c == CurveFp382_1 {
+	} else if c == BN381_1 {
 		curve = "5540996953667913971058039301942914304734176495422447785042938606876043190415948413757785063597439175372845535461389"
 		field = "5540996953667913971058039301942914304734176495422447785045292539108217242186829586959562222833658991069414454984723"
-	} else if c == CurveFp382_2 {
+	} else if c == BN381_2 {
 		curve = "5541245505022739011583672869577435255026888277144126952448297309161979278754528049907713682488818304329661351460877"
 		field = "5541245505022739011583672869577435255026888277144126952450651294188487038640194767986566260919128250811286032482323"
 	} else if c == BLS12_381 {
@@ -341,11 +341,11 @@ func test(t *testing.T, c int) {
 
 func TestMain(t *testing.T) {
 	t.Logf("GetMaxOpUnitSize() = %d\n", GetMaxOpUnitSize())
-	t.Log("CurveFp254BNb")
-	test(t, CurveFp254BNb)
+	t.Log("BN254")
+	test(t, BN254)
 	if GetMaxOpUnitSize() == 6 {
-		t.Log("CurveFp382_1")
-		test(t, CurveFp382_1)
+		t.Log("BN381_1")
+		test(t, BN381_1)
 		t.Log("BLS12_381")
 		test(t, BLS12_381)
 	}
@@ -353,9 +353,9 @@ func TestMain(t *testing.T) {
 
 // Benchmarks
 
-var curve = CurveFp382_1
+var curve = BN381_1
 
-//var curve = CurveFp254BNb
+//var curve = BN254
 
 func BenchmarkPubkeyFromSeckey(b *testing.B) {
 	b.StopTimer()

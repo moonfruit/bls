@@ -1,4 +1,4 @@
-package mcl
+package bls
 
 import "testing"
 import "fmt"
@@ -128,11 +128,11 @@ func testMcl(t *testing.T, c int) {
 
 func TestMclMain(t *testing.T) {
 	t.Logf("GetMaxOpUnitSize() = %d\n", GetMaxOpUnitSize())
-	t.Log("CurveFp254BNb")
-	testMcl(t, CurveFp254BNb)
+	t.Log("BN254")
+	testMcl(t, BN254)
 	if GetMaxOpUnitSize() == 6 {
-		t.Log("CurveFp382_1")
-		testMcl(t, CurveFp382_1)
+		t.Log("BN381_1")
+		testMcl(t, BN381_1)
 		t.Log("BLS12_381")
 		testMcl(t, BLS12_381)
 	}

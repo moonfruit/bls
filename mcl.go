@@ -1,36 +1,23 @@
-package mcl
+package bls
 
 /*
-#cgo CFLAGS:-DMCLBN_FP_UNIT_SIZE=6
-#cgo bn256 CFLAGS:-UMCLBN_FP_UNIT_SIZE -DMCLBN_FP_UNIT_SIZE=4
 #include <mcl/bn.h>
 */
 import "C"
 import "fmt"
 import "unsafe"
 
-// CurveFp254BNb -- 254 bit curve
-const CurveFp254BNb = C.mclBn_CurveFp254BNb
+// BN254 -- 254 bit curve
+const BN254 = C.MCL_BN254
 
-// CurveFp382_1 -- 382 bit curve 1
-const CurveFp382_1 = C.mclBn_CurveFp382_1
+// BN381_1 -- 382 bit curve 1
+const BN381_1 = C.MCL_BN381_1
 
-// CurveFp382_2 -- 382 bit curve 2
-const CurveFp382_2 = C.mclBn_CurveFp382_2
+// BN381_2 -- 382 bit curve 2
+const BN381_2 = C.MCL_BN381_2
 
 // BLS12_381
 const BLS12_381 = C.MCL_BLS12_381
-
-// Init --
-// call this function before calling all the other operations
-// this function is not thread safe
-func Init(curve int) error {
-	err := C.mclBn_init(C.int(curve), C.MCLBN_FP_UNIT_SIZE)
-	if err != 0 {
-		return fmt.Errorf("ERR mclBn_init curve=%d", curve)
-	}
-	return nil
-}
 
 // GetMaxOpUnitSize --
 func GetMaxOpUnitSize() int {
