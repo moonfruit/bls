@@ -1,7 +1,7 @@
-# BLS Library
+# Library Version
 
-Github | Commit
------- | ------
+Library | Version
+------- | -------
 [bls](https://github.com/herumi/bls) | 72a6189
 [mcl](https://github.com/herumi/mcl) | 543b4d7
 [xbyak](https://github.com/herumi/xbyak) | 71b75f6
