@@ -133,6 +133,8 @@ func TestMclMain(t *testing.T) {
 	if GetMaxOpUnitSize() == 6 {
 		t.Log("BN381_1")
 		testMcl(t, BN381_1)
+		t.Log("BN381_2")
+		testMcl(t, BN381_2)
 		t.Log("BLS12_381")
 		testMcl(t, BLS12_381)
 	}
