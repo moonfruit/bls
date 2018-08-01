@@ -10,6 +10,9 @@ import "unsafe"
 // BN254 -- 254 bit curve
 const BN254 = C.MCL_BN254
 
+// BN_SNARK1
+const BN_SNARK1 = C.MCL_BN_SNARK1
+
 // BN381_1 -- 382 bit curve 1
 const BN381_1 = C.MCL_BN381_1
 
