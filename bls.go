@@ -10,7 +10,7 @@ import "unsafe"
 // initCurve --
 // call this function before calling all the other operations
 // this function is not thread safe
-func initCurve(curve curveType) error {
+func initCurve(curve Curve) error {
 	err := C.blsInit(C.int(curve), C.MCLBN_FP_UNIT_SIZE)
 	if err != 0 {
 		return fmt.Errorf("initialize curve `%v` error on `%v`", curve, err)

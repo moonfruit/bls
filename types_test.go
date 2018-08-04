@@ -9,7 +9,7 @@ import (
 func TestConcurrent(t *testing.T) {
 	var wg sync.WaitGroup
 
-	test := func(curve curveType, index int) {
+	test := func(curve Curve, index int) {
 		wg.Add(1)
 		go curve.Run(func() {
 			defer wg.Done()
@@ -19,7 +19,7 @@ func TestConcurrent(t *testing.T) {
 		})
 	}
 
-	testAll := func(curve curveType) {
+	testAll := func(curve Curve) {
 		defer wg.Done()
 		for i := 0; i < 5; i++ {
 			test(curve, i)
