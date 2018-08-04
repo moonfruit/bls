@@ -7,16 +7,17 @@ import "C"
 import "fmt"
 import "unsafe"
 
-// Init --
+// initCurve --
 // call this function before calling all the other operations
 // this function is not thread safe
-func Init(curve int) error {
+func initCurve(curve curveType) error {
 	err := C.blsInit(C.int(curve), C.MCLBN_FP_UNIT_SIZE)
 	if err != 0 {
-		return fmt.Errorf("ERR Init curve=%d", curve)
+		return fmt.Errorf("initialize curve `%v` error on `%v`", curve, err)
 	}
 	return nil
 }
+
 
 // ID --
 type ID struct {
@@ -111,8 +112,9 @@ func (sec *SecretKey) IsEqual(rhs *SecretKey) bool {
 }
 
 // SetByCSPRNG --
-func (sec *SecretKey) SetByCSPRNG() {
+func (sec *SecretKey) SetByCSPRNG() *SecretKey {
 	sec.v.SetByCSPRNG()
+	return sec
 }
 
 // Add --
@@ -257,10 +259,15 @@ func (sec *SecretKey) GetPublicKey() (pub *PublicKey) {
 
 // Sign -- Constant Time version
 func (sec *SecretKey) Sign(m string) (sign *Sign) {
+	return sec.SignBytes([]byte(m))
+}
+
+// SignBytes --
+func (sec *SecretKey) SignBytes(buf []byte) (sign *Sign) {
 	sign = new(Sign)
-	buf := []byte(m)
 	// #nosec
-	C.blsSign(sign.getPointer(), sec.getPointer(), unsafe.Pointer(&buf[0]), C.size_t(len(buf)))
+	p, s := cbuf(buf)
+	C.blsSign(sign.getPointer(), sec.getPointer(), p, s)
 	return sign
 }
 
@@ -277,14 +284,27 @@ func (sign *Sign) Recover(signVec []Sign, idVec []ID) error {
 
 // Verify --
 func (sign *Sign) Verify(pub *PublicKey, m string) bool {
-	buf := []byte(m)
+	return sign.VerifyBytes(pub, []byte(m))
+}
+
+// VerifyBytes --
+func (sign *Sign) VerifyBytes(pub *PublicKey, buf []byte) bool {
 	// #nosec
-	return C.blsVerify(sign.getPointer(), pub.getPointer(), unsafe.Pointer(&buf[0]), C.size_t(len(buf))) == 1
+	p, s := cbuf(buf)
+	return C.blsVerify(sign.getPointer(), pub.getPointer(), p, s) == 1
 }
 
 // VerifyPop --
 func (sign *Sign) VerifyPop(pub *PublicKey) bool {
 	return C.blsVerifyPop(sign.getPointer(), pub.getPointer()) == 1
+}
+
+func cbuf(buf []byte) (unsafe.Pointer, C.size_t) {
+	length := len(buf)
+	if length == 0 {
+		return nil, 0
+	}
+	return unsafe.Pointer(&buf[0]), C.size_t(length)
 }
 
 // DHKeyExchange --
