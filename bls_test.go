@@ -280,7 +280,7 @@ func testData(t *testing.T) {
 	}
 }
 
-func testOrder(t *testing.T, c curveType) {
+func testOrder(t *testing.T, c Curve) {
 	var curve string
 	var field string
 	if c == BN254 {
@@ -324,7 +324,7 @@ func testDHKeyExchange(t *testing.T) {
 	}
 }
 
-func test(t *testing.T, c curveType) {
+func test(t *testing.T, c Curve) {
 	t.Logf("-------- %v --------", c)
 	err := initCurve(c)
 	if err != nil {

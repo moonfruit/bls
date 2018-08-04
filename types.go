@@ -1,7 +1,7 @@
 package bls
 
 /*
-#include <bls/bls.h>
+#include <mcl/curve_type.h>
 */
 import "C"
 
@@ -13,50 +13,37 @@ import (
 //noinspection GoSnakeCaseUsage,GoNameStartsWithPackageName
 const (
 	// BN254 -- 254 bit curve
-	BN254 = curveType(C.MCL_BN254)
+	BN254 = Curve(C.MCL_BN254)
 
 	// BN_SNARK1
-	BN_SNARK1 = curveType(C.MCL_BN_SNARK1)
+	BN_SNARK1 = Curve(C.MCL_BN_SNARK1)
 
 	// BN381_1 -- 382 bit curve 1
-	BN381_1 = curveType(C.MCL_BN381_1)
+	BN381_1 = Curve(C.MCL_BN381_1)
 
 	// BN381_2 -- 382 bit curve 2
-	BN381_2 = curveType(C.MCL_BN381_2)
+	BN381_2 = Curve(C.MCL_BN381_2)
 
 	// BLS12_381
-	BLS12_381 = curveType(C.MCL_BLS12_381)
+	BLS12_381 = Curve(C.MCL_BLS12_381)
 )
 
-func init() {
-	mustInitCurve(BN254)
-}
-
-var current curveType
+var current Curve = -1
 var currentMutex sync.RWMutex
 
-func mustInitCurve(curve curveType) {
-	err := initCurve(curve)
-	if err != nil {
-		panic(err)
-	}
-	current = curve
-}
-
-//noinspection GoExportedFuncWithUnexportedType
-func CurrentCurveType() curveType {
+func CurrentCurveType() Curve {
 	currentMutex.RLock()
 	defer currentMutex.RUnlock()
 	return current
 }
 
-type curveType int8
+type Curve int8
 
-func (curve curveType) Init() {
+func (curve Curve) Init() {
 	curve.Run(nil)
 }
 
-func (curve curveType) Run(fun func()) {
+func (curve Curve) Run(fun func()) {
 	currentMutex.RLock()
 	rlock := true
 	defer func() {
@@ -73,7 +60,11 @@ func (curve curveType) Run(fun func()) {
 		defer currentMutex.Unlock()
 
 		if current != curve {
-			mustInitCurve(curve)
+			err := initCurve(curve)
+			if err != nil {
+				panic(err)
+			}
+			current = curve
 		}
 	}
 
@@ -82,37 +73,41 @@ func (curve curveType) Run(fun func()) {
 	}
 }
 
-func (curve curveType) PrivateKeyLength() int {
+func (curve Curve) IsValid() bool {
+	return curve == BN254 || curve == BN_SNARK1 || curve == BN381_1 || curve == BN381_2 || curve == BLS12_381
+}
+
+func (curve Curve) PrivateKeyLength() int {
 	if curve == BN254 || curve == BN_SNARK1 || curve == BLS12_381 {
 		return 32
 	} else if curve == BN381_1 || curve == BN381_2 {
 		return 48
 	} else {
-		panic(fmt.Sprintf("invalid curve type `%d`", curve))
+		panic(fmt.Sprintf("invalid curve `%d`", curve))
 	}
 }
 
-func (curve curveType) PublicKeyLength() int {
+func (curve Curve) PublicKeyLength() int {
 	if curve == BN254 || curve == BN_SNARK1 {
 		return 64
 	} else if curve == BN381_1 || curve == BN381_2 || curve == BLS12_381 {
 		return 96
 	} else {
-		panic(fmt.Sprintf("invalid curve type `%d`", curve))
+		panic(fmt.Sprintf("invalid curve `%d`", curve))
 	}
 }
 
-func (curve curveType) SignatureLength() int {
+func (curve Curve) SignatureLength() int {
 	if curve == BN254 || curve == BN_SNARK1 {
 		return 32
 	} else if curve == BN381_1 || curve == BN381_2 || curve == BLS12_381 {
 		return 48
 	} else {
-		panic(fmt.Sprintf("invalid curve type `%d`", curve))
+		panic(fmt.Sprintf("invalid curve `%d`", curve))
 	}
 }
 
-func (curve curveType) String() string {
+func (curve Curve) String() string {
 	switch curve {
 	case BN254:
 		return "BN254"

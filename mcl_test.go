@@ -114,7 +114,7 @@ func testPairing(t *testing.T) {
 	}
 }
 
-func testMcl(t *testing.T, c curveType) {
+func testMcl(t *testing.T, c Curve) {
 	fmt.Printf("    ---   %v\n", c)
 	err := initCurve(c)
 	if err != nil {
