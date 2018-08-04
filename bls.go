@@ -18,7 +18,6 @@ func initCurve(curve Curve) error {
 	return nil
 }
 
-
 // ID --
 type ID struct {
 	v Fr

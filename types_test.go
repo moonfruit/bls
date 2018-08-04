@@ -1,9 +1,9 @@
 package bls
 
 import (
-	"testing"
-	"sync"
 	"fmt"
+	"sync"
+	"testing"
 )
 
 func TestConcurrent(t *testing.T) {
