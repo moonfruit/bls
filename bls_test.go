@@ -280,7 +280,7 @@ func testData(t *testing.T) {
 	}
 }
 
-func testOrder(t *testing.T, c int) {
+func testOrder(t *testing.T, c curveType) {
 	var curve string
 	var field string
 	if c == BN254 {
@@ -324,8 +324,9 @@ func testDHKeyExchange(t *testing.T) {
 	}
 }
 
-func test(t *testing.T, c int) {
-	err := Init(c)
+func test(t *testing.T, c curveType) {
+	t.Logf("-------- %v --------", c)
+	err := initCurve(c)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -344,14 +345,11 @@ func test(t *testing.T, c int) {
 
 func TestMain(t *testing.T) {
 	t.Logf("GetMaxOpUnitSize() = %d\n", GetMaxOpUnitSize())
-	t.Log("BN254")
 	test(t, BN254)
-	t.Log("BN_SNARK1")
 	test(t, BN_SNARK1)
 	if GetMaxOpUnitSize() == 6 {
-		t.Log("BN381_1")
 		test(t, BN381_1)
-		t.Log("BLS12_381")
+		test(t, BN381_2)
 		test(t, BLS12_381)
 	}
 }
@@ -364,7 +362,7 @@ var curve = BN381_1
 
 func BenchmarkPubkeyFromSeckey(b *testing.B) {
 	b.StopTimer()
-	err := Init(curve)
+	err := initCurve(curve)
 	if err != nil {
 		b.Fatal(err)
 	}
@@ -379,7 +377,7 @@ func BenchmarkPubkeyFromSeckey(b *testing.B) {
 
 func BenchmarkSigning(b *testing.B) {
 	b.StopTimer()
-	err := Init(curve)
+	err := initCurve(curve)
 	if err != nil {
 		b.Fatal(err)
 	}
@@ -394,7 +392,7 @@ func BenchmarkSigning(b *testing.B) {
 
 func BenchmarkValidation(b *testing.B) {
 	b.StopTimer()
-	err := Init(curve)
+	err := initCurve(curve)
 	if err != nil {
 		b.Fatal(err)
 	}
@@ -412,7 +410,7 @@ func BenchmarkValidation(b *testing.B) {
 
 func benchmarkDeriveSeckeyShare(k int, b *testing.B) {
 	b.StopTimer()
-	err := Init(curve)
+	err := initCurve(curve)
 	if err != nil {
 		b.Fatal(err)
 	}
@@ -442,7 +440,7 @@ func BenchmarkDeriveSeckeyShare500(b *testing.B) { benchmarkDeriveSeckeyShare(50
 
 func benchmarkRecoverSeckey(k int, b *testing.B) {
 	b.StopTimer()
-	err := Init(curve)
+	err := initCurve(curve)
 	if err != nil {
 		b.Fatal(err)
 	}
@@ -483,7 +481,7 @@ func BenchmarkRecoverSeckey1000(b *testing.B) { benchmarkRecoverSeckey(1000, b) 
 
 func benchmarkRecoverSignature(k int, b *testing.B) {
 	b.StopTimer()
-	err := Init(curve)
+	err := initCurve(curve)
 	if err != nil {
 		b.Fatal(err)
 	}

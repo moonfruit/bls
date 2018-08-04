@@ -114,9 +114,9 @@ func testPairing(t *testing.T) {
 	}
 }
 
-func testMcl(t *testing.T, c int) {
+func testMcl(t *testing.T, c curveType) {
 	fmt.Printf("    ---   %v\n", c)
-	err := Init(c)
+	err := initCurve(c)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -129,16 +129,11 @@ func testMcl(t *testing.T, c int) {
 
 func TestMclMain(t *testing.T) {
 	t.Logf("GetMaxOpUnitSize() = %d\n", GetMaxOpUnitSize())
-	t.Log("BN254")
 	testMcl(t, BN254)
-	t.Log("BN_SNARK1")
 	testMcl(t, BN_SNARK1)
 	if GetMaxOpUnitSize() == 6 {
-		t.Log("BN381_1")
 		testMcl(t, BN381_1)
-		t.Log("BN381_2")
 		testMcl(t, BN381_2)
-		t.Log("BLS12_381")
 		testMcl(t, BLS12_381)
 	}
 }
