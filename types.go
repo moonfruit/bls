@@ -77,7 +77,7 @@ func (curve Curve) IsValid() bool {
 	return curve == BN254 || curve == BN_SNARK1 || curve == BN381_1 || curve == BN381_2 || curve == BLS12_381
 }
 
-func (curve Curve) PrivateKeyLength() int {
+func (curve Curve) SecretKeyLength() int {
 	if curve == BN254 || curve == BN_SNARK1 || curve == BLS12_381 {
 		return 32
 	} else if curve == BN381_1 || curve == BN381_2 {
@@ -97,7 +97,7 @@ func (curve Curve) PublicKeyLength() int {
 	}
 }
 
-func (curve Curve) SignatureLength() int {
+func (curve Curve) SignLength() int {
 	if curve == BN254 || curve == BN_SNARK1 {
 		return 32
 	} else if curve == BN381_1 || curve == BN381_2 || curve == BLS12_381 {
