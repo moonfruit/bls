@@ -74,35 +74,43 @@ func (curve Curve) Run(fun func()) {
 }
 
 func (curve Curve) IsValid() bool {
-	return curve == BN254 || curve == BN_SNARK1 || curve == BN381_1 || curve == BN381_2 || curve == BLS12_381
+	switch curve {
+	case BN254, BN_SNARK1, BN381_1, BN381_2, BLS12_381:
+		return true
+	default:
+		return false
+	}
 }
 
 func (curve Curve) SecretKeyLength() int {
-	if curve == BN254 || curve == BN_SNARK1 || curve == BLS12_381 {
+	switch curve {
+	case BN254, BN_SNARK1, BLS12_381:
 		return 32
-	} else if curve == BN381_1 || curve == BN381_2 {
+	case BN381_1, BN381_2:
 		return 48
-	} else {
+	default:
 		panic(fmt.Sprintf("invalid curve `%d`", curve))
 	}
 }
 
 func (curve Curve) PublicKeyLength() int {
-	if curve == BN254 || curve == BN_SNARK1 {
+	switch curve {
+	case BN254, BN_SNARK1:
 		return 64
-	} else if curve == BN381_1 || curve == BN381_2 || curve == BLS12_381 {
+	case BN381_1, BN381_2, BLS12_381:
 		return 96
-	} else {
+	default:
 		panic(fmt.Sprintf("invalid curve `%d`", curve))
 	}
 }
 
 func (curve Curve) SignLength() int {
-	if curve == BN254 || curve == BN_SNARK1 {
+	switch curve {
+	case BN254, BN_SNARK1:
 		return 32
-	} else if curve == BN381_1 || curve == BN381_2 || curve == BLS12_381 {
+	case BN381_1, BN381_2, BLS12_381:
 		return 48
-	} else {
+	default:
 		panic(fmt.Sprintf("invalid curve `%d`", curve))
 	}
 }
@@ -119,6 +127,7 @@ func (curve Curve) String() string {
 		return "BN381_2"
 	case BLS12_381:
 		return "BLS12_381"
+	default:
+		return fmt.Sprintf("UNKNOWN(%d)", curve)
 	}
-	return fmt.Sprintf("UNKNOWN(%d)", curve)
 }
