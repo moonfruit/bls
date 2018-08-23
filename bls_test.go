@@ -356,9 +356,7 @@ func TestMain(t *testing.T) {
 
 // Benchmarks
 
-var curve = BN381_1
-
-//var curve = BN254
+var curve = BLS12_381
 
 func BenchmarkPubkeyFromSeckey(b *testing.B) {
 	b.StopTimer()
@@ -432,11 +430,10 @@ func benchmarkDeriveSeckeyShare(k int, b *testing.B) {
 	}
 }
 
-//func BenchmarkDeriveSeckeyShare100(b *testing.B)  { benchmarkDeriveSeckeyShare(100, b) }
-//func BenchmarkDeriveSeckeyShare200(b *testing.B)  { benchmarkDeriveSeckeyShare(200, b) }
-func BenchmarkDeriveSeckeyShare500(b *testing.B) { benchmarkDeriveSeckeyShare(500, b) }
-
-//func BenchmarkDeriveSeckeyShare1000(b *testing.B) { benchmarkDeriveSeckeyShare(1000, b) }
+func BenchmarkDeriveSeckeyShare100(b *testing.B)  { benchmarkDeriveSeckeyShare(100, b) }
+func BenchmarkDeriveSeckeyShare200(b *testing.B)  { benchmarkDeriveSeckeyShare(200, b) }
+func BenchmarkDeriveSeckeyShare500(b *testing.B)  { benchmarkDeriveSeckeyShare(500, b) }
+func BenchmarkDeriveSeckeyShare1000(b *testing.B) { benchmarkDeriveSeckeyShare(1000, b) }
 
 func benchmarkRecoverSeckey(k int, b *testing.B) {
 	b.StopTimer()
@@ -474,10 +471,11 @@ func benchmarkRecoverSeckey(k int, b *testing.B) {
 	}
 }
 
-func BenchmarkRecoverSeckey100(b *testing.B)  { benchmarkRecoverSeckey(100, b) }
-func BenchmarkRecoverSeckey200(b *testing.B)  { benchmarkRecoverSeckey(200, b) }
-func BenchmarkRecoverSeckey500(b *testing.B)  { benchmarkRecoverSeckey(500, b) }
-func BenchmarkRecoverSeckey1000(b *testing.B) { benchmarkRecoverSeckey(1000, b) }
+func BenchmarkRecoverSeckey100(b *testing.B) { benchmarkRecoverSeckey(100, b) }
+func BenchmarkRecoverSeckey200(b *testing.B) { benchmarkRecoverSeckey(200, b) }
+
+//func BenchmarkRecoverSeckey500(b *testing.B)  { benchmarkRecoverSeckey(500, b) }
+//func BenchmarkRecoverSeckey1000(b *testing.B) { benchmarkRecoverSeckey(1000, b) }
 
 func benchmarkRecoverSignature(k int, b *testing.B) {
 	b.StopTimer()
@@ -517,7 +515,8 @@ func benchmarkRecoverSignature(k int, b *testing.B) {
 	}
 }
 
-func BenchmarkRecoverSignature100(b *testing.B)  { benchmarkRecoverSignature(100, b) }
-func BenchmarkRecoverSignature200(b *testing.B)  { benchmarkRecoverSignature(200, b) }
-func BenchmarkRecoverSignature500(b *testing.B)  { benchmarkRecoverSignature(500, b) }
-func BenchmarkRecoverSignature1000(b *testing.B) { benchmarkRecoverSignature(1000, b) }
+func BenchmarkRecoverSignature100(b *testing.B) { benchmarkRecoverSignature(100, b) }
+func BenchmarkRecoverSignature200(b *testing.B) { benchmarkRecoverSignature(200, b) }
+
+//func BenchmarkRecoverSignature500(b *testing.B)  { benchmarkRecoverSignature(500, b) }
+//func BenchmarkRecoverSignature1000(b *testing.B) { benchmarkRecoverSignature(1000, b) }
