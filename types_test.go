@@ -26,7 +26,8 @@ func TestConcurrent(t *testing.T) {
 		}
 	}
 
-	wg.Add(5)
+	wg.Add(6)
+	go testAll(BN160)
 	go testAll(BN254)
 	go testAll(BN_SNARK1)
 	go testAll(BN381_1)

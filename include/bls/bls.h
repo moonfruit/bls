@@ -27,7 +27,7 @@
 	#endif
 #elif defined(__EMSCRIPTEN__) && !defined(BLS_DONT_EXPORT)
 	#define BLS_DLL_API __attribute__((used))
-#elif defined(__wasm__) && !defined(MCLBN_DONT_EXPORT)
+#elif defined(__wasm__) && !defined(BLS_DONT_EXPORT)
 	#define BLS_DLL_API __attribute__((visibility("default")))
 #else
 	#define BLS_DLL_API
@@ -117,6 +117,12 @@ BLS_DLL_API mclSize blsGetOpUnitSize(void);
 // return strlen(buf) if success else 0
 BLS_DLL_API int blsGetCurveOrder(char *buf, mclSize maxBufSize);
 BLS_DLL_API int blsGetFieldOrder(char *buf, mclSize maxBufSize);
+
+// return bytes for serialized G1(=Fp)
+BLS_DLL_API int blsGetG1ByteSize(void);
+
+// return bytes for serialized Fr
+BLS_DLL_API int blsGetFrByteSize(void);
 
 // get a generator of G2
 BLS_DLL_API void blsGetGeneratorOfG2(blsPublicKey *pub);
