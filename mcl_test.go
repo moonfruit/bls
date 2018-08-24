@@ -129,6 +129,7 @@ func testMcl(t *testing.T, c Curve) {
 
 func TestMclMain(t *testing.T) {
 	t.Logf("GetMaxOpUnitSize() = %d\n", GetMaxOpUnitSize())
+	testMcl(t, BN160)
 	testMcl(t, BN254)
 	testMcl(t, BN_SNARK1)
 	if GetMaxOpUnitSize() == 6 {

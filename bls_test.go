@@ -69,10 +69,15 @@ func testStringConversion(t *testing.T) {
 	t.Log("testRecoverSecretKey")
 	var sec SecretKey
 	var s string
-	if unitN == 6 {
+	switch unitN {
+	case 6:
 		s = "16798108731015832284940804142231733909759579603404752749028378864165570215949"
-	} else {
+	case 4:
 		s = "40804142231733909759579603404752749028378864165570215949"
+	case 3:
+		s = "177918506041298415765688777805187196715630433784"
+	default:
+		t.Fatalf("bac unitN `%v`", unitN)
 	}
 	err := sec.SetDecString(s)
 	if err != nil {
@@ -283,7 +288,10 @@ func testData(t *testing.T) {
 func testOrder(t *testing.T, c Curve) {
 	var curve string
 	var field string
-	if c == BN254 {
+	if c == BN160 {
+		curve = "205523667896953300194895899082072403858390252929"
+		field = "205523667896953300194896352429254920972540065223"
+	} else if c == BN254 {
 		curve = "16798108731015832284940804142231733909759579603404752749028378864165570215949"
 		field = "16798108731015832284940804142231733909889187121439069848933715426072753864723"
 	} else if c == BN_SNARK1 {
@@ -343,8 +351,9 @@ func test(t *testing.T, c Curve) {
 	testDHKeyExchange(t)
 }
 
-func TestMain(t *testing.T) {
+func TestBlsMain(t *testing.T) {
 	t.Logf("GetMaxOpUnitSize() = %d\n", GetMaxOpUnitSize())
+	test(t, BN160)
 	test(t, BN254)
 	test(t, BN_SNARK1)
 	if GetMaxOpUnitSize() == 6 {

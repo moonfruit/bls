@@ -4,14 +4,14 @@ package bls
 #include <mcl/curve_type.h>
 */
 import "C"
-
-import (
-	"fmt"
-	"sync"
-)
+import "fmt"
+import "sync"
 
 //noinspection GoSnakeCaseUsage,GoNameStartsWithPackageName
 const (
+	// BN160
+	BN160 = Curve(C.MCL_BN160)
+
 	// BN254 -- 254 bit curve
 	BN254 = Curve(C.MCL_BN254)
 
@@ -31,7 +31,7 @@ const (
 var current Curve = -1
 var currentMutex sync.RWMutex
 
-func CurrentCurveType() Curve {
+func CurrentCurve() Curve {
 	currentMutex.RLock()
 	defer currentMutex.RUnlock()
 	return current
@@ -75,7 +75,7 @@ func (curve Curve) Run(fun func()) {
 
 func (curve Curve) IsValid() bool {
 	switch curve {
-	case BN254, BN_SNARK1, BN381_1, BN381_2, BLS12_381:
+	case BN160, BN254, BN_SNARK1, BN381_1, BN381_2, BLS12_381:
 		return true
 	default:
 		return false
@@ -117,6 +117,8 @@ func (curve Curve) SignLength() int {
 
 func (curve Curve) String() string {
 	switch curve {
+	case BN160:
+		return "BN160"
 	case BN254:
 		return "BN254"
 	case BN_SNARK1:
