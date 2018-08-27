@@ -72,7 +72,7 @@ func BenchmarkTypes(b *testing.B) {
 type mypanic func(args ...interface{})
 
 func realpanic(args ...interface{}) {
-	panic(fmt.Sprintln(args))
+	panic(fmt.Sprintln(args...))
 }
 
 func testWhole(fun mypanic) {
