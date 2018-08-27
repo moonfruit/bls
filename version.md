@@ -2,7 +2,7 @@
 
 Library | Version
 ------- | -------
-[bls](https://github.com/herumi/bls) | 06a8ffa
-[mcl](https://github.com/herumi/mcl) | 4c92ce3
-[xbyak](https://github.com/herumi/xbyak) | 64775ca
-[cybozulib](https://github.com/herumi/cybozulib) | adf7d31
+[bls](https://github.com/herumi/bls) | 1fea314
+[mcl](https://github.com/herumi/mcl) | ee793ea
+[xbyak](https://github.com/herumi/xbyak) | 43e1558
+[cybozulib](https://github.com/herumi/cybozulib) | b79a6da
