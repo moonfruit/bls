@@ -37,6 +37,22 @@ func TestConcurrent(t *testing.T) {
 	wg.Wait()
 }
 
+func TestConcurrent2(t *testing.T) {
+	BLS12_381.Init()
+
+	var wg sync.WaitGroup
+
+	for i := 0; i < 2000; i++ {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			testWhole(t.Fatal)
+		}()
+	}
+
+	wg.Wait()
+}
+
 func BenchmarkTypesInit(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		BN_SNARK1.Init()
