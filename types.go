@@ -4,8 +4,10 @@ package bls
 #include <mcl/curve_type.h>
 */
 import "C"
-import "fmt"
-import "sync"
+import (
+	"fmt"
+	"sync"
+)
 
 //noinspection GoSnakeCaseUsage,GoNameStartsWithPackageName
 const (

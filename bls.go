@@ -4,8 +4,10 @@ package bls
 #include <bls/bls.h>
 */
 import "C"
-import "fmt"
-import "unsafe"
+import (
+	"fmt"
+	"unsafe"
+)
 
 // initCurve --
 // call this function before calling all the other operations
