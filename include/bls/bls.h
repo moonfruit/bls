@@ -57,12 +57,14 @@ typedef struct {
 	initialize this library
 	call this once before using the other functions
 	@param curve [in] enum value defined in mcl/bn.h
-	@param maxUnitSize [in] MCLBN_FP_UNIT_SIZE (fixed)
-	return 0 if success
+	@param compiledTimeVar [in] specify MCLBN_COMPILED_TIME_VAR,
+	which macro is used to make sure that the values
+	are the same when the library is built and used
+	@return 0 if success
 	@note blsInit() is thread safe and serialized if it is called simultaneously
 	but don't call it while using other functions.
 */
-BLS_DLL_API int blsInit(int curve, int maxUnitSize);
+BLS_DLL_API int blsInit(int curve, int compiledTimeVar);
 
 BLS_DLL_API void blsIdSetInt(blsId *id, int x);
 
@@ -72,6 +74,7 @@ BLS_DLL_API int blsSecretKeySetLittleEndian(blsSecretKey *sec, const void *buf, 
 
 BLS_DLL_API void blsGetPublicKey(blsPublicKey *pub, const blsSecretKey *sec);
 
+// calculate the has of m and sign the hash
 BLS_DLL_API void blsSign(blsSignature *sig, const blsSecretKey *sec, const void *m, mclSize size);
 
 // return 1 if valid
@@ -122,8 +125,31 @@ BLS_DLL_API int blsPublicKeyIsValidOrder(const blsPublicKey *pub);
 
 #ifndef BLS_MINIMUM_API
 
+/*
+	sign the hash
+	use the low (bitSize of r) - 1 bit of h
+	return 0 if success else -1
+	NOTE : return false if h is zero or c1 or -c1 value for BN254. see hashTest() in test/bls_test.hpp
+*/
+BLS_DLL_API int blsSignHash(blsSignature *sig, const blsSecretKey *sec, const void *h, mclSize size);
+// return 1 if valid
+BLS_DLL_API int blsVerifyHash(const blsSignature *sig, const blsPublicKey *pub, const void *h, mclSize size);
+
+/*
+	verify aggSig with pubVec[0, n) and hVec[0, n)
+	e(aggSig, Q) = prod_i e(hVec[i], pubVec[i])
+	return 1 if valid
+	@note do not check duplication of hVec
+*/
+BLS_DLL_API int blsVerifyAggregatedHashes(const blsSignature *aggSig, const blsPublicKey *pubVec, const void *hVec, size_t sizeofHash, mclSize n);
+
+// sub
+BLS_DLL_API void blsSecretKeySub(blsSecretKey *sec, const blsSecretKey *rhs);
+BLS_DLL_API void blsPublicKeySub(blsPublicKey *pub, const blsPublicKey *rhs);
+BLS_DLL_API void blsSignatureSub(blsSignature *sig, const blsSignature *rhs);
+
 // not thread safe version (old blsInit)
-BLS_DLL_API int blsInitNotThreadSafe(int curve, int maxUnitSize);
+BLS_DLL_API int blsInitNotThreadSafe(int curve, int compiledTimeVar);
 
 BLS_DLL_API mclSize blsGetOpUnitSize(void);
 // return strlen(buf) if success else 0
