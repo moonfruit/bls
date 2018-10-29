@@ -1,7 +1,9 @@
 package bls
 
-import "testing"
-import "fmt"
+import (
+	"fmt"
+	"testing"
+)
 
 func testBadPointOfG2(t *testing.T) {
 	var Q G2

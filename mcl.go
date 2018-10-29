@@ -4,8 +4,10 @@ package bls
 #include <mcl/bn.h>
 */
 import "C"
-import "fmt"
-import "unsafe"
+import (
+	"fmt"
+	"unsafe"
+)
 
 // IoSerializeHexStr
 const IoSerializeHexStr = C.MCLBN_IO_SERIALIZE_HEX_STR

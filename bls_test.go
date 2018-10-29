@@ -1,7 +1,9 @@
 package bls
 
-import "testing"
-import "strconv"
+import (
+	"strconv"
+	"testing"
+)
 
 var unitN = 0
 
