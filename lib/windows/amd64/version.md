@@ -7,4 +7,3 @@ Library | Version
 [xbyak](https://github.com/herumi/xbyak) | 64775ca
 [cybozulib](https://github.com/herumi/cybozulib) | adf7d31
 [gmp](https://gmplib.org) | 6.1.2
-[openssl](https://openssl.org) | 1.0.2p
