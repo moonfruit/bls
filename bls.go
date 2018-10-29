@@ -288,14 +288,20 @@ func (sec *SecretKey) GetPublicKey() (pub *PublicKey) {
 
 // Sign -- Constant Time version
 func (sec *SecretKey) Sign(m string) (sign *Sign) {
-	return sec.SignBytes([]byte(m))
+	p, s := stringToC(m)
+	return sec.sign(p, s)
 }
 
 // SignBytes --
 func (sec *SecretKey) SignBytes(buf []byte) (sign *Sign) {
+	p, s := sliceToC(buf)
+	return sec.sign(p, s)
+}
+
+// sign --
+func (sec *SecretKey) sign(p unsafe.Pointer, s C.size_t) (sign *Sign) {
 	sign = new(Sign)
 	// #nosec
-	p, s := cbuf(buf)
 	C.blsSign(sign.getPointer(), sec.getPointer(), p, s)
 	return sign
 }
@@ -313,27 +319,25 @@ func (sign *Sign) Recover(signVec []Sign, idVec []ID) error {
 
 // Verify --
 func (sign *Sign) Verify(pub *PublicKey, m string) bool {
-	return sign.VerifyBytes(pub, []byte(m))
+	p, s := stringToC(m)
+	return sign.verify(pub, p, s)
 }
 
 // VerifyBytes --
 func (sign *Sign) VerifyBytes(pub *PublicKey, buf []byte) bool {
+	p, s := sliceToC(buf)
+	return sign.verify(pub, p, s)
+}
+
+// verify --
+func (sign *Sign) verify(pub *PublicKey, p unsafe.Pointer, s C.size_t) bool {
 	// #nosec
-	p, s := cbuf(buf)
 	return C.blsVerify(sign.getPointer(), pub.getPointer(), p, s) == 1
 }
 
 // VerifyPop --
 func (sign *Sign) VerifyPop(pub *PublicKey) bool {
 	return C.blsVerifyPop(sign.getPointer(), pub.getPointer()) == 1
-}
-
-func cbuf(buf []byte) (unsafe.Pointer, C.size_t) {
-	length := len(buf)
-	if length == 0 {
-		return nil, 0
-	}
-	return unsafe.Pointer(&buf[0]), C.size_t(length)
 }
 
 // DHKeyExchange --
