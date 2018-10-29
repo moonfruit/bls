@@ -2,9 +2,7 @@
 
 Library | Version
 ------- | -------
-[bls](https://github.com/herumi/bls) | 06a8ffa
-[mcl](https://github.com/herumi/mcl) | 4c92ce3
-[xbyak](https://github.com/herumi/xbyak) | 64775ca
-[cybozulib](https://github.com/herumi/cybozulib) | adf7d31
+[bls](https://github.com/herumi/bls) | 5f21120
+[mcl](https://github.com/herumi/mcl) | 0a086ef
 [gmp](https://gmplib.org) | 6.1.2
 [openssl](https://openssl.org) | 1.0.2p
