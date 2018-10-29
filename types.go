@@ -28,8 +28,10 @@ const (
 	BLS12_381 = Curve(C.MCL_BLS12_381)
 )
 
-var current Curve = -1
-var currentMutex sync.RWMutex
+var (
+	current      Curve = -1
+	currentMutex sync.RWMutex
+)
 
 func CurrentCurve() Curve {
 	currentMutex.RLock()
@@ -44,6 +46,10 @@ func (curve Curve) Init() {
 }
 
 func (curve Curve) Run(fun func()) {
+	if !curve.IsValid() {
+		panic(fmt.Sprintf("invalid curve `%d`", curve))
+	}
+
 	currentMutex.RLock()
 	rlock := true
 	defer func() {
