@@ -285,6 +285,41 @@ func testData(t *testing.T) {
 	}
 }
 
+func testSerializeToHexStr(t *testing.T) {
+	t.Log("testSerializeToHexStr")
+	var sec1, sec2 SecretKey
+	sec1.SetByCSPRNG()
+	s := sec1.SerializeToHexStr()
+	err := sec2.DeserializeHexStr(s)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !sec1.IsEqual(&sec2) {
+		t.Error("SecretKey not same")
+	}
+	pub1 := sec1.GetPublicKey()
+	s = pub1.SerializeToHexStr()
+	var pub2 PublicKey
+	err = pub2.DeserializeHexStr(s)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !pub1.IsEqual(&pub2) {
+		t.Error("PublicKey not same")
+	}
+	m := "doremi"
+	sign1 := sec1.Sign(m)
+	s = sign1.SerializeToHexStr()
+	var sign2 Sign
+	err = sign2.DeserializeHexStr(s)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !sign1.IsEqual(&sign2) {
+		t.Error("Sign not same")
+	}
+}
+
 func testOrder(t *testing.T, c Curve) {
 	var curve string
 	var field string
@@ -349,6 +384,7 @@ func test(t *testing.T, c Curve) {
 	testStringConversion(t)
 	testOrder(t, c)
 	testDHKeyExchange(t)
+	testSerializeToHexStr(t)
 }
 
 func TestBlsMain(t *testing.T) {
