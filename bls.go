@@ -11,7 +11,7 @@ import "unsafe"
 // call this function before calling all the other operations
 // this function is not thread safe
 func initCurve(curve Curve) error {
-	err := C.blsInit(C.int(curve), C.MCLBN_FP_UNIT_SIZE)
+	err := C.blsInit(C.int(curve), C.MCLBN_COMPILED_TIME_VAR)
 	if err != 0 {
 		return fmt.Errorf("initialize curve `%v` error on `%v`", curve, err)
 	}
@@ -83,6 +83,16 @@ func (sec *SecretKey) GetLittleEndian() []byte {
 // SetLittleEndian --
 func (sec *SecretKey) SetLittleEndian(buf []byte) error {
 	return sec.v.SetLittleEndian(buf)
+}
+
+// SerializeToHexStr --
+func (sec *SecretKey) SerializeToHexStr() string {
+	return sec.v.GetString(IoSerializeHexStr)
+}
+
+// DeserializeHexStr --
+func (sec *SecretKey) DeserializeHexStr(s string) error {
+	return sec.v.SetString(s, IoSerializeHexStr)
 }
 
 // GetHexString --
@@ -181,6 +191,16 @@ func (pub *PublicKey) Deserialize(buf []byte) error {
 	return pub.v.Deserialize(buf)
 }
 
+// SerializeToHexStr --
+func (pub *PublicKey) SerializeToHexStr() string {
+	return pub.v.GetString(IoSerializeHexStr)
+}
+
+// DeserializeHexStr --
+func (pub *PublicKey) DeserializeHexStr(s string) error {
+	return pub.v.SetString(s, IoSerializeHexStr)
+}
+
 // GetHexString --
 func (pub *PublicKey) GetHexString() string {
 	return pub.v.GetString(16)
@@ -232,6 +252,16 @@ func (sign *Sign) Serialize() []byte {
 // Deserialize --
 func (sign *Sign) Deserialize(buf []byte) error {
 	return sign.v.Deserialize(buf)
+}
+
+// SerializeToHexStr --
+func (sign *Sign) SerializeToHexStr() string {
+	return sign.v.GetString(IoSerializeHexStr)
+}
+
+// DeserializeHexStr --
+func (sign *Sign) DeserializeHexStr(s string) error {
+	return sign.v.SetString(s, IoSerializeHexStr)
 }
 
 // GetHexString --

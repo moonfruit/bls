@@ -7,6 +7,9 @@ import "C"
 import "fmt"
 import "unsafe"
 
+// IoSerializeHexStr
+const IoSerializeHexStr = C.MCLBN_IO_SERIALIZE_HEX_STR
+
 // GetMaxOpUnitSize --
 func GetMaxOpUnitSize() int {
 	return int(C.MCLBN_FP_UNIT_SIZE)
