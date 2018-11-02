@@ -1,4 +1,5 @@
 .*
 !.git*
 
+/sha*.go
 /test
