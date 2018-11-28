@@ -1,11 +1,11 @@
 package bls
 
 /*
-#cgo CFLAGS:-I${SRCDIR}/include -DMCLBN_FP_UNIT_SIZE=6
-#cgo LDFLAGS:-lbls384 -lmcl -lgmp -lstdc++
-#cgo linux,amd64 LDFLAGS:-L${SRCDIR}/lib/linux/amd64
-#cgo darwin,amd64 LDFLAGS:-L${SRCDIR}/lib/darwin/amd64
-#cgo windows,amd64 LDFLAGS:-L${SRCDIR}/lib/windows/amd64 -static
+#cgo CFLAGS: -I${SRCDIR}/include -DMCLBN_FP_UNIT_SIZE=6
+#cgo LDFLAGS: -lbls384 -lmcl -lgmp -lstdc++
+#cgo linux,amd64 LDFLAGS: -L${SRCDIR}/lib/linux/amd64
+#cgo darwin,amd64 LDFLAGS: -L${SRCDIR}/lib/darwin/amd64
+#cgo windows,amd64 LDFLAGS: -L${SRCDIR}/lib/windows/amd64 -static
 
 #include <stdlib.h>
 #include <string.h>
