@@ -5,10 +5,51 @@ package bls
 /*
 #include <stdlib.h>
 
-unsigned char *SHA256(const unsigned char *d, size_t n, unsigned char *md);
-unsigned char *SHA512(const unsigned char *d, size_t n, unsigned char *md);
+int SHA256_Init(void *c);
+int SHA256_Update(void *c, const void *data, size_t len);
+int SHA256_Final(unsigned char *md, void *c);
 
-typedef unsigned char *(*HASH)(const unsigned char *d, size_t n, unsigned char *md);
+int SHA512_Init(void *c);
+int SHA512_Update(void *c, const void *data, size_t len);
+int SHA512_Final(unsigned char *md, void *c);
+
+unsigned char *GO_SHA_256(const unsigned char *data, size_t len, unsigned char *md) {
+	int c = 256;
+
+	if (!SHA256_Init(&c)) {
+		return NULL;
+	}
+
+	if (!SHA256_Update(&c, data, len)) {
+		return NULL;
+	}
+
+	if (!SHA256_Final(md, &c)) {
+		return NULL;
+	}
+
+	return md;
+}
+
+unsigned char *GO_SHA_512(const unsigned char *data, size_t len, unsigned char *md) {
+	int c = 512;
+
+	if (!SHA512_Init(&c)) {
+		return NULL;
+	}
+
+	if (!SHA512_Update(&c, data, len)) {
+		return NULL;
+	}
+
+	if (!SHA512_Final(md, &c)) {
+		return NULL;
+	}
+
+	return md;
+}
+
+typedef unsigned char *(*HASH)(const unsigned char *data, size_t len, unsigned char *md);
 
 static void hash(HASH h) {
 	const char *d =
@@ -43,7 +84,7 @@ func Sha256(data []byte) []byte {
 	p, s := sliceToC(data)
 	md := C.malloc(sha256.Size)
 	defer C.free(md)
-	C.SHA256((*C.uchar)(p), s, (*C.uchar)(md))
+	C.GO_SHA_256((*C.uchar)(p), s, (*C.uchar)(md))
 	return C.GoBytes(md, sha256.Size)
 }
 
@@ -51,14 +92,14 @@ func Sha512(data []byte) []byte {
 	p, s := sliceToC(data)
 	md := C.malloc(sha512.Size)
 	defer C.free(md)
-	C.SHA512((*C.uchar)(p), s, (*C.uchar)(md))
+	C.GO_SHA_512((*C.uchar)(p), s, (*C.uchar)(md))
 	return C.GoBytes(md, sha512.Size)
 }
 
 func Run256() {
-	C.hash((C.HASH)(C.SHA256))
+	C.hash((C.HASH)(C.GO_SHA_256))
 }
 
 func Run512() {
-	C.hash((C.HASH)(C.SHA512))
+	C.hash((C.HASH)(C.GO_SHA_512))
 }

@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 var (
@@ -34,7 +35,8 @@ func TestCompatible(t *testing.T) {
 	BLS12_381.Init()
 
 	var key SecretKey
-	key.SetLittleEndian(keyBytes)
+	err := key.SetLittleEndian(keyBytes)
+	require.NoError(t, err)
 
 	pkey := key.GetPublicKey()
 	pkeyBytes := pkey.Serialize()
