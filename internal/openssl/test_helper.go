@@ -11,6 +11,42 @@ package openssl
 
 #include <openssl/sha.h>
 
+unsigned char *OPENSSL_SHA256(const unsigned char *data, size_t len, unsigned char *md) {
+	SHA256_CTX c;
+
+	if (!SHA256_Init(&c)) {
+		return NULL;
+	}
+
+	if (!SHA256_Update(&c, data, len)) {
+		return NULL;
+	}
+
+	if (!SHA256_Final(md, &c)) {
+		return NULL;
+	}
+
+	return md;
+}
+
+unsigned char *OPENSSL_SHA512(const unsigned char *data, size_t len, unsigned char *md) {
+	SHA512_CTX c;
+
+	if (!SHA512_Init(&c)) {
+		return NULL;
+	}
+
+	if (!SHA512_Update(&c, data, len)) {
+		return NULL;
+	}
+
+	if (!SHA512_Final(md, &c)) {
+		return NULL;
+	}
+
+	return md;
+}
+
 typedef unsigned char *(*HASH)(const unsigned char *d, size_t n, unsigned char *md);
 
 static void hash(HASH h) {
@@ -48,7 +84,7 @@ func Sha256(data []byte) []byte {
 	p, s := sliceToC(data)
 	md := C.malloc(sha256size)
 	defer C.free(md)
-	C.SHA256((*C.uchar)(p), s, (*C.uchar)(md))
+	C.OPENSSL_SHA256((*C.uchar)(p), s, (*C.uchar)(md))
 	return C.GoBytes(md, sha256size)
 }
 
@@ -56,16 +92,16 @@ func Sha512(data []byte) []byte {
 	p, s := sliceToC(data)
 	md := C.malloc(sha512size)
 	defer C.free(md)
-	C.SHA512((*C.uchar)(p), s, (*C.uchar)(md))
+	C.OPENSSL_SHA512((*C.uchar)(p), s, (*C.uchar)(md))
 	return C.GoBytes(md, sha512size)
 }
 
 func Run256() {
-	C.hash((C.HASH)(C.SHA256))
+	C.hash((C.HASH)(C.OPENSSL_SHA256))
 }
 
 func Run512() {
-	C.hash((C.HASH)(C.SHA512))
+	C.hash((C.HASH)(C.OPENSSL_SHA512))
 }
 
 func sliceToC(buf []byte) (unsafe.Pointer, C.size_t) {

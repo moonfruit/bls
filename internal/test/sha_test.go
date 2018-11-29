@@ -49,3 +49,22 @@ func BenchmarkSha(b *testing.B) {
 	b.Run("openssl512", bench(openssl.Run512))
 	b.Run("mbedtls512", bench(mbedtls.Run512))
 }
+
+func BenchmarkConcurrentSha(b *testing.B) {
+	bench := func(f func()) func(b *testing.B) {
+		return func(b *testing.B) {
+			b.RunParallel(func(pb *testing.PB) {
+				for pb.Next() {
+					f()
+				}
+			})
+		}
+	}
+
+	b.Run("go256", bench(bls.Run256))
+	b.Run("openssl256", bench(openssl.Run256))
+	b.Run("mbedtls256", bench(mbedtls.Run256))
+	b.Run("go512", bench(bls.Run512))
+	b.Run("openssl512", bench(openssl.Run512))
+	b.Run("mbedtls512", bench(mbedtls.Run512))
+}

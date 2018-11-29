@@ -3,7 +3,56 @@
 package mbedtls
 
 /*
+#cgo CFLAGS: -DMBEDTLS_PREFIX=MBEDTLS
+#cgo darwin CFLAGS: -I/usr/local/opt/openssl/include
+
 #include <stdlib.h>
+
+#include <openssl/sha.h>
+
+int MBEDTLS_SHA256_Init(SHA256_CTX *c);
+int MBEDTLS_SHA256_Update(SHA256_CTX *c, const void *data, size_t len);
+int MBEDTLS_SHA256_Final(unsigned char *md, SHA256_CTX *c);
+
+int MBEDTLS_SHA512_Init(SHA512_CTX *c);
+int MBEDTLS_SHA512_Update(SHA512_CTX *c, const void *data, size_t len);
+int MBEDTLS_SHA512_Final(unsigned char *md, SHA512_CTX *c);
+
+unsigned char *MBEDTLS_SHA256(const unsigned char *data, size_t len, unsigned char *md) {
+	SHA256_CTX c;
+
+	if (!MBEDTLS_SHA256_Init(&c)) {
+		return NULL;
+	}
+
+	if (!MBEDTLS_SHA256_Update(&c, data, len)) {
+		return NULL;
+	}
+
+	if (!MBEDTLS_SHA256_Final(md, &c)) {
+		return NULL;
+	}
+
+	return md;
+}
+
+unsigned char *MBEDTLS_SHA512(const unsigned char *data, size_t len, unsigned char *md) {
+	SHA512_CTX c;
+
+	if (!MBEDTLS_SHA512_Init(&c)) {
+		return NULL;
+	}
+
+	if (!MBEDTLS_SHA512_Update(&c, data, len)) {
+		return NULL;
+	}
+
+	if (!MBEDTLS_SHA512_Final(md, &c)) {
+		return NULL;
+	}
+
+	return md;
+}
 
 typedef unsigned char *(*HASH)(const unsigned char *d, size_t n, unsigned char *md);
 
