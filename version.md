@@ -2,5 +2,5 @@
 
 Library | Version
 ------- | -------
-[bls](https://github.com/herumi/bls) | da48823
-[mcl](https://github.com/herumi/mcl) | 5c8dad4
+[bls](https://github.com/herumi/bls) | e9d5952
+[mcl](https://github.com/herumi/mcl) | e97eca1

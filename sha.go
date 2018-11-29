@@ -1,7 +1,7 @@
 package bls
 
 /*
-#include <strings.h>
+#include <string.h>
 */
 import "C"
 import (
