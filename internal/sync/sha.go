@@ -1,8 +1,7 @@
-package bls
+package sha
 
 /*
-#include <stdlib.h>
-#include <string.h>
+#include <strings.h>
 */
 import "C"
 import (
@@ -76,28 +75,4 @@ func final(md *C.uchar, c unsafe.Pointer) C.int {
 	p, s := sliceToC(hasher.(hash.Hash).Sum(nil))
 	C.memcpy(unsafe.Pointer(md), p, s)
 	return 1
-}
-
-func hash256(data []byte) []byte {
-	p, s := sliceToC(data)
-	md := C.malloc(sha256.Size)
-	defer C.free(md)
-
-	SHA256_Init(nil)
-	SHA256_Update(nil, p, s)
-	SHA256_Final((*C.uchar)(md), nil)
-
-	return C.GoBytes(md, sha256.Size)
-}
-
-func hash512(data []byte) []byte {
-	p, s := sliceToC(data)
-	md := C.malloc(sha512.Size)
-	defer C.free(md)
-
-	SHA512_Init(nil)
-	SHA512_Update(nil, p, s)
-	SHA512_Final((*C.uchar)(md), nil)
-
-	return C.GoBytes(md, sha512.Size)
 }
