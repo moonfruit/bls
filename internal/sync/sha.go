@@ -61,18 +61,26 @@ func update(c, data unsafe.Pointer, len C.size_t) C.int {
 		return 0
 	}
 
-	hasher.(hash.Hash).Write(C.GoBytes(data, C.int(len)))
+	hasher.(hash.Hash).Write(slice(data, int(len)))
 	return 1
 }
 
 func final(md *C.uchar, c unsafe.Pointer) C.int {
-	hasher, ok := store.Load(c)
+	obj, ok := store.Load(c)
 	if !ok {
 		return 0
 	}
 	store.Delete(c)
 
-	p, s := sliceToC(hasher.(hash.Hash).Sum(nil))
-	C.memcpy(unsafe.Pointer(md), p, s)
+	hasher := obj.(hash.Hash)
+	hasher.Sum(sliceWithCap(unsafe.Pointer(md), 0, hasher.Size()))
 	return 1
+}
+
+func slice(pointer unsafe.Pointer, len int) []byte {
+	return sliceWithCap(pointer, len, len)
+}
+
+func sliceWithCap(pointer unsafe.Pointer, len, cap int) []byte {
+	return (*[1<<30]byte)(pointer)[:len:cap]
 }
