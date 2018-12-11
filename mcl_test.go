@@ -151,8 +151,10 @@ func TestMclMain(t *testing.T) {
 	testMcl(t, BN254)
 	testMcl(t, BN_SNARK1)
 	if GetMaxOpUnitSize() == 6 {
-		testMcl(t, BN381_1)
-		testMcl(t, BN381_2)
+		if GetFrUnitSize() == 6 {
+			testMcl(t, BN381_1)
+			testMcl(t, BN381_2)
+		}
 		testMcl(t, BLS12_381)
 	}
 }

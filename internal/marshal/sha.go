@@ -59,7 +59,7 @@ func update(c, data unsafe.Pointer, len C.size_t) C.int {
 		return 0
 	}
 
-	hasher.Write(C.GoBytes(data, C.int(len)))
+	hasher.Write(slice(data, int(len)))
 	return marshal(c, hasher)
 }
 
@@ -69,8 +69,7 @@ func final(md *C.uchar, c unsafe.Pointer) C.int {
 		return 0
 	}
 
-	p, s := sliceToC(hasher.Sum(nil))
-	C.memcpy(unsafe.Pointer(md), p, s)
+	hasher.Sum(sliceWithCap(unsafe.Pointer(md), 0, hasher.Size()))
 	return marshal(c, hasher)
 }
 
@@ -109,18 +108,24 @@ func marshal(c unsafe.Pointer, hasher hash.Hash) C.int {
 }
 
 func unmarshal(c unsafe.Pointer) (hash.Hash, error) {
-	var magic [4]byte
-	copy(magic[:], C.GoBytes(c, 4))
-
+	magic := *(*[4]byte)(c)
 	info, ok := hashStore[magic]
 	if !ok {
 		return nil, fmt.Errorf("unknown magic `%v`", magic)
 	}
 
 	hasher := info.New()
-	if err := hasher.(encoding.BinaryUnmarshaler).UnmarshalBinary(C.GoBytes(c, C.int(info.Size))); err != nil {
+	if err := hasher.(encoding.BinaryUnmarshaler).UnmarshalBinary(slice(c, info.Size)); err != nil {
 		return nil, err
 	}
 
 	return hasher, nil
+}
+
+func slice(pointer unsafe.Pointer, len int) []byte {
+	return sliceWithCap(pointer, len, len)
+}
+
+func sliceWithCap(pointer unsafe.Pointer, len, cap int) []byte {
+	return (*[1<<30]byte)(pointer)[:len:cap]
 }

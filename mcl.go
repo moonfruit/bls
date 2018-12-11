@@ -12,6 +12,17 @@ import (
 // IoSerializeHexStr
 const IoSerializeHexStr = C.MCLBN_IO_SERIALIZE_HEX_STR
 
+// GetFrUnitSize() --
+func GetFrUnitSize() int {
+	return int(C.MCLBN_FR_UNIT_SIZE)
+}
+
+// GetFpUnitSize() --
+// same as GetMaxOpUnitSize()
+func GetFpUnitSize() int {
+	return int(C.MCLBN_FP_UNIT_SIZE)
+}
+
 // GetMaxOpUnitSize --
 func GetMaxOpUnitSize() int {
 	return int(C.MCLBN_FP_UNIT_SIZE)
